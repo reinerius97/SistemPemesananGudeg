@@ -1,0 +1,23 @@
+<?php
+
+namespace App\Filters;
+
+use CodeIgniter\Filters\FilterInterface;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+
+class AuthFilter implements FilterInterface
+{
+    public function before(RequestInterface $request, $arguments = null)
+    {
+        $session = session();
+        if (!$session->get('isLoggedIn') || $session->get('role') !== 'admin') {
+            return redirect()->to('/auth/login')->with('error', 'You must be logged in as admin.');
+        }
+    }
+
+    public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
+    {
+        // Do nothing
+    }
+}
